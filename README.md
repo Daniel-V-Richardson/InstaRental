@@ -1,4 +1,4 @@
-# An Simple Applications for searching Houses or Rooms in Cities, Towns, etc..
+# An Simple React Native Application for searching Houses or Rooms in Cities, Towns, etc..
 
 <h1><u>Inorder to run the Code:</u></h1>
 <ul>
