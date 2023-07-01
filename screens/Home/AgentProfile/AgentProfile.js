@@ -4,7 +4,7 @@ import {images} from '../../../constants'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
-import styles from './agentProfileStyle'
+import styles from './AgentProfileStyle'
 
 const AgentProfile = ({navigation}) => {
     return(

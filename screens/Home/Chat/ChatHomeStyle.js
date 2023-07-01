@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-const Styles =StyleSheet.create({
+const Styles = StyleSheet.create({
     container:{
         backgroundColor:'#000',
         alignItems:'center'
