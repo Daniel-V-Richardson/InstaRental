@@ -1,6 +1,6 @@
 import {View,Text,ScrollView,TouchableOpacity,Image} from 'react-native'
 import {images} from '../../../constants'
-import styles from './chatHomeStyle'
+import styles from './ChatHomeStyle'
 import {FontAwesome} from '@expo/vector-icons'
 
 const ChatHome = ({navigation}) => {

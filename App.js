@@ -19,7 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 import UseFonts from "./Hooks/UseFonts";
 import { useCallback, useState } from "react";
-import AgentProfile from './screens/Home/AgentProfile/agentProfile'
+import AgentProfile from './screens/Home/AgentProfile/AgentProfile'
 import ProfileScreen from './screens/Profile/profile'
 import ChatHome from "./screens/Home/Chat/ChatHomeScreen";
 
