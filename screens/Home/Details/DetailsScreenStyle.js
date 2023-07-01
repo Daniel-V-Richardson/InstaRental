@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#d1d0cd'
   },
   topContainer:{
-    height:'50%',
+    height:'48%',
     alignItems:'center'
   },
   backgroundImage:{
