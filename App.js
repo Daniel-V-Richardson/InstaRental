@@ -11,13 +11,37 @@ import PropertyRegisterScreen from "./screens/PropertyRegister/PropertyRegisterS
 import HomeScreen from "./screens/Home/HomeScreen";
 import DetailsScreen from "./screens/Home/Details/DetailsScreen";
 import ChatScreen from "./screens/Home/Chat/ChatScreen";
+import { useFonts } from "expo-font";
+import Toast from 'react-native-toast-message';
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
+
+import UseFonts from "./Hooks/UseFonts";
+import { useCallback, useState } from "react";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [fontsLoaded] = useFonts({
+    InterBlack: require("./assets/fonts/Inter-Black.ttf"),
+    InterBold: require("./assets/fonts/Inter-Bold.ttf"),
+    InterMedium: require("./assets/fonts/Inter-Medium.ttf"),
+    InterRegular: require("./assets/fonts/Inter-Regular.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={onLayoutRootView}>
         <Stack.Screen
           options={{ headerShown: false }}
           name="InitialScreen"

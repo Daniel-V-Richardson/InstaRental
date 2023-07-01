@@ -89,6 +89,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
   },
+  lottie: {
+    width: 100,
+    height: 100,
+  },
 });
 
 export default styles;
