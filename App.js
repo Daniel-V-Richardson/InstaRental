@@ -11,6 +11,9 @@ import PropertyRegisterScreen from "./screens/PropertyRegister/PropertyRegisterS
 import HomeScreen from "./screens/Home/HomeScreen";
 import DetailsScreen from "./screens/Home/Details/DetailsScreen";
 import ChatScreen from "./screens/Home/Chat/ChatScreen";
+import AgentProfile from './screens/Home/AgentProfile/agentProfile'
+import ProfileScreen from './screens/Profile/profile'
+import ChatHome from "./screens/Home/Chat/ChatHomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +55,21 @@ function App() {
           options={{ headerShown: false }}
           component={ChatScreen}
           name="Chat"
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          component={AgentProfile}
+          name="AgentProfile"
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          component={ProfileScreen}
+          name="ProfilePage"
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          component={ChatHome}
+          name="ChatHome"
         />
         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>
