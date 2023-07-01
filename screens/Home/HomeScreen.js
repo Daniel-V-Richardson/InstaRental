@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   BackHandler,
+  Touchable,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -201,11 +202,14 @@ const HomePage = ({ navigation }) => {
         <View style={styles.searchRowContainer}>
           {basedOnSearch.map((item) => (
             <View key={item.id} style={styles.columnCard}>
-              <Image source={item.imageSource} style={styles.searchImage} />
-
+              <TouchableOpacity onPress={()=>navigation.navigate("Details")}>
+                  <Image source={item.imageSource} style={styles.searchImage} />
+              </TouchableOpacity>
               <View style={styles.columnOverlay}>
                 <View style={styles.userContainer}>
-                  <Image source={item.avatar} style={styles.avatar} />
+                  <TouchableOpacity onPress={()=>navigation.navigate('AgentProfile')}>
+                     <Image source={item.avatar} style={styles.avatar} />
+                  </TouchableOpacity>
                   <View style={styles.userInfo}>
                     <Text style={styles.userName}>{item.userName}</Text>
                     <Text style={styles.location}>{item.location}</Text>
@@ -215,7 +219,21 @@ const HomePage = ({ navigation }) => {
             </View>
           ))}
         </View>
+        <View style={styles.bottom}>
+           <Text></Text>
+        </View>
       </ScrollView>
+        <View style={styles.navbar}>
+                <TouchableOpacity onPress={()=>navigation.navigate("Home")}>
+                      <FontAwesome name='home' size={30} color={'#fff'} />
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={()=> navigation.navigate("ChatHome")}>
+                      <FontAwesome name='comments' size={30} color={'#9b9e9e'} />
+                </TouchableOpacity >
+                <TouchableOpacity onPress={()=>navigation.navigate('ProfilePage')}>
+                      <FontAwesome name='user' size={30} color={'#9b9e9e'} />
+                </TouchableOpacity>
+        </View>
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </View>
   );

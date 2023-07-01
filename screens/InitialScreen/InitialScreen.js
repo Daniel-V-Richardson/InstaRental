@@ -9,6 +9,7 @@ import {
 import styles from "./InitialScreenStyle";
 import { useState } from "react";
 import { icons, images } from "../../constants";
+
 const InitialScreen = ({ navigation }) => {
   const Stack = createNativeStackNavigator();
   return (

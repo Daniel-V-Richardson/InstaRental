@@ -160,6 +160,22 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 14,
   },
+  navbar:{
+    position:'absolute',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    width:'80%',
+    backgroundColor:"#000",
+    bottom:10,
+    paddingLeft:45,
+    paddingRight:45,
+    paddingTop:20,
+    paddingBottom:20,
+    borderRadius:30
+  },
+  bottom:{
+    marginTop:60,
+}
 });
 
 export default styles;

@@ -6,13 +6,15 @@ import {
   Text,
   FlatList,
   Image,
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Voice from "react-native-voice";
-
+import {images } from '../../../constants'
 import styles from "./ChatScreenStyle";
+// import { ScrollView } from "react-native-web";
 
-const ChatScreen = () => {
+const ChatScreen = ({navigation}) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
@@ -91,15 +93,27 @@ const ChatScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.chatContainer}>
-        <FlatList
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.messagesContainer}
-          inverted
-        />
-      </View>
+        <View style={styles.userBanner}>
+            <View>
+              <TouchableOpacity onPress={()=>navigation.navigate("AgentProfile")}>
+              <Image source={images.avatar} style={styles.bannerAvatar} />
+              </TouchableOpacity>  
+            </View>
+            <View>
+                <Text style={styles.usrName} >User Name</Text>
+              </View>
+        </View>
+        <ScrollView>  
+          <View style={styles.chatContainer}>
+            <FlatList
+              data={messages}
+              renderItem={renderMessage}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.messagesContainer}
+              inverted
+            />
+          </View>
+      </ScrollView>
       <View style={styles.inputContainer}>
         {/* <TouchableOpacity onPress={isRecording ? handleVoiceEnd : handleVoiceStart}>
           <Icon name={isRecording ? 'microphone-slash' : 'microphone'} size={24} color="black" />

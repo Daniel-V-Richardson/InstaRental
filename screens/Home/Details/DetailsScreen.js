@@ -16,7 +16,9 @@ export default function DetailsScreen({ navigation }) {
       <View style={styles.topContainer}>
         <Image source={images.home_row1} style={styles.backgroundImage}></Image>
         <View style={styles.userContainer}>
-          <Image source={images.avatar} style={styles.avatar} />
+          <TouchableOpacity onPress={()=> navigation.navigate("AgentProfile")}>
+             <Image source={images.avatar} style={styles.avatar} />
+          </TouchableOpacity>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>Arun</Text>
             <Text style={styles.location}>Thoohthukudi</Text>
