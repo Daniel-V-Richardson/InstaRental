@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginTop: 35,
+    marginTop: 25,
   },
   text: {
     fontSize: 16,
