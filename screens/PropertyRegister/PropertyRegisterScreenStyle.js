@@ -14,35 +14,39 @@ const Styles = StyleSheet.create({
   },
 
   input: {
-    width: 300,
+    position:'absolute',
     height: 50,
+    width:300,
     fontSize:16,
     borderWidth: 1,
-    borderColor: '#777',
-    backgroundColor: '#D9D9D9',
+    borderColor: '#000',
+    backgroundColor: '#fff',
     borderRadius: 15,
-    paddingLeft: 15,
-    marginLeft:10
+    marginLeft:30,
+    paddingLeft:10
   },
   backgroundImage: {
-    flex: 1,
     resizeMode: "contain",
     justifyContent: "center",
-    alignItems: "center",
   },
   textHeader:{
     marginTop: 30,
-    fontFamily:FONT.bold
+    fontFamily:FONT.bold,
   },
   text:{
     fontSize:21,
     fontFamily:FONT.bold,
     marginBottom:10,
+    color:'#fff'
   },
   label:{
     top: 10,
-    marginBottom:10,
+    marginBottom:30,
+    marginTop:20,
+    marginLeft:25,
     fontSize:18,
+    color:'#fff',
+    fontWeight:'bold'
   },
   buttonContainer: {
     width: 180,
@@ -52,6 +56,7 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   btnValue: {
     color: "white",
     fontSize: 20,
@@ -59,13 +64,17 @@ const Styles = StyleSheet.create({
   },
   subButton:{
     alignItems:'center',
-    marginTop:30,
-    marginBottom:20,
+    marginTop:40,
+    marginBottom:30,
   },
   backButton:{
     alignItems:'center',
     marginBottom:20,
-  }
+  },
+  lottie: {
+    width: 100,
+    height: 100,
+  },
  });
 
 export default Styles;

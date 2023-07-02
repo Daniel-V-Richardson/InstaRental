@@ -1,6 +1,6 @@
 import Index from "./Index";
 
-function App(props) {
+function App() {
   return <Index />;
 }
 

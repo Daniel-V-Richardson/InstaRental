@@ -41,7 +41,8 @@ export default function GetStarted({ navigation }) {
         >
           Showcase your property
         </Text>
-        <Text style={styles.rentBtn}>Rent a property</Text>
+        <Text style={styles.rentBtn}
+        onPress={() => navigation.navigate("UserRegister")}>Rent a property</Text>
       </View>
     </View>
   );
