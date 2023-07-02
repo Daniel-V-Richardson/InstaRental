@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   headerComponent: {
-    fontFamily: "InterBold",
+    fontFamily: FONT.bold,
     alignItems: "center",
     fontSize: 24,
   },
