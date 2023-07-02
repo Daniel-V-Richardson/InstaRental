@@ -11,9 +11,11 @@ import PropertyRegisterScreen from "./screens/PropertyRegister/PropertyRegisterS
 import HomeScreen from "./screens/Home/HomeScreen";
 import DetailsScreen from "./screens/Home/Details/DetailsScreen";
 import ChatScreen from "./screens/Home/Chat/ChatScreen";
+import UserRegister from "./screens/UserRegister/UserRegisterScreen";
 import { useFonts } from "expo-font";
 import Toast from 'react-native-toast-message';
 import * as SplashScreen from "expo-splash-screen";
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -94,6 +96,11 @@ function App() {
           options={{ headerShown: false }}
           component={ChatHome}
           name="ChatHome"
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          component={UserRegister}
+          name="UserRegister"
         />
         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>

@@ -14,15 +14,17 @@ import styles from './profileStyle'
 
   const Profile=({navigation}) => {
       const Stack = createNativeStackNavigator();
+
     return (
       <View style={styles.container}>
-         <Text style={styles.userHeader}>User Name</Text>
+      
+         <Text style={styles.userHeader}>User Details</Text>
 
             <View style={styles.userInfoContainer}>
                 <Image source={images.avatar} style={styles.userAvatar} />
-                <Text style={styles.userName}>User Name</Text>
-                <Text style={styles.userName}>exapmle@gmail.com</Text>
-                <Text style={styles.userName}>Thoothukudi</Text>
+                <Text style={styles.userName}>userName</Text>
+                <Text style={styles.userName}>emailAddress</Text>
+                <Text style={styles.userName}>location</Text>
                 <Text style={styles.userName}>Male</Text>
                 <TouchableOpacity style={styles.editUserButton}>
                    <Text style={styles.editUserText}>Edit User Information</Text>
