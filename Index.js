@@ -10,16 +10,20 @@ import DetailsScreen from "./screens/Home/Details/DetailsScreen";
 import ChatScreen from "./screens/Home/Chat/ChatScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AgentProfile from "./screens/Home/AgentProfile/AgentProfile";
 import ProfileScreen from "./screens/Profile/ProfileScreen";
 import ChatHome from "./screens/Home/Chat/ChatHomeScreen";
+import UserRegisterScreen from "./screens/UserRegister/UserRegisterScreen";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import UploadImageComponent from "./Components/UploadImageComponent";
 
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();
 
-function Index() {
+const Index = () => {
   const [fontsLoaded] = useFonts({
     InterBlack: require("./assets/fonts/Inter-Black.ttf"),
     InterBold: require("./assets/fonts/Inter-Bold.ttf"),
@@ -45,6 +49,11 @@ function Index() {
           options={{ headerShown: false }}
           name="InitialScreen"
           component={InitialScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="UserRegister"
+          component={UserRegisterScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}
@@ -92,10 +101,15 @@ function Index() {
           component={ChatHome}
           name="ChatHome"
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          component={UploadImageComponent}
+          name="UploadImages"
+        />
         {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default Index;

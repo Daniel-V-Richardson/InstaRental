@@ -1,7 +1,8 @@
 import Index from "./Index";
 
-function App() {
+const App = () => {
+  
   return <Index />;
-}
+};
 
 export default App;
