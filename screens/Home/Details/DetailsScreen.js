@@ -6,22 +6,74 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { images } from "../../../constants";
+import { FONT, icons, images } from "../../../constants";
 import { FontAwesome } from "@expo/vector-icons";
 import styles from "./DetailsScreenStyle";
+import { useEffect, useState } from "react";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import AnimatedLoader from "react-native-animated-loader";
+import { Ionicons } from '@expo/vector-icons';
 
-export default function DetailsScreen({ navigation }) {
+export default function DetailsScreen({ navigation, route }) {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    
+    const { uid } = route.params;
+
+    const fetchData = async () => {
+      const docRef = doc(collection(db, "Owners"), uid);
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        setData(docSnapshot.data());
+      }
+    };
+    fetchData();
+    setIsLoading(false);
+  }, [route.params]);
+
+  // if (!data) {
+  // }
+
+  const truncatedLocation =
+    data?.location.length > 20
+      ? `${data.location.substring(0, 20)}...`
+      : data?.location;
+  // const images = data.imageUploaded || [];
+
   return (
     <View style={styles.container}>
+      <AnimatedLoader
+        visible={isLoading}
+        overlayColor="rgba(0,0,0,0.5)"
+        animationStyle={styles.lottie}
+        speed={1}
+      >
+        <Text style={{ color: "white", fontFamily: FONT.black }}>
+          Loading Property information...
+        </Text>
+      </AnimatedLoader>
       <View style={styles.topContainer}>
-        <Image source={images.home_row1} style={styles.backgroundImage}></Image>
+        <View style={styles.textHeader}>
+          <TouchableOpacity
+            style={styles.backContainer}
+            onPress={() => navigation.navigate("Home")}
+          >
+            <Ionicons style={styles.backBtn} name="arrow-back" size={30} color="white" />
+          </TouchableOpacity>
+        </View>
+        <Image
+          source={{ uri: data?.imageUploaded[0] }}
+          style={styles.backgroundImage}
+        ></Image>
         <View style={styles.userContainer}>
-          <TouchableOpacity onPress={()=> navigation.navigate("AgentProfile")}>
-             <Image source={images.avatar} style={styles.avatar} />
+          <TouchableOpacity onPress={() => navigation.navigate("AgentProfile")}>
+            <Image source={images.avatar} style={styles.avatar} />
           </TouchableOpacity>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>Arun</Text>
-            <Text style={styles.location}>Thoohthukudi</Text>
+            <Text style={styles.userName}>{data?.userName}</Text>
+            <Text style={styles.location}>{truncatedLocation}</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
             <FontAwesome
@@ -43,7 +95,7 @@ export default function DetailsScreen({ navigation }) {
               color="#000"
               style={styles.icon}
             />
-            <Text style={styles.iconText}>3 Rooms</Text>
+            <Text style={styles.iconText}>{data?.totalRooms}</Text>
           </View>
           <View style={styles.firstContainer}>
             <FontAwesome
@@ -52,7 +104,7 @@ export default function DetailsScreen({ navigation }) {
               color="#000"
               style={styles.icon}
             />
-            <Text style={styles.iconText}>Advance </Text>
+            <Text style={styles.iconText}>{data?.advanceAmount} </Text>
           </View>
           <View style={styles.firstContainer}>
             <FontAwesome
@@ -61,25 +113,24 @@ export default function DetailsScreen({ navigation }) {
               color="#000"
               style={styles.icon}
             />
-            <Text style={styles.iconText}>Rent</Text>
+            <Text style={styles.iconText}>{data?.rent}</Text>
           </View>
         </View>
 
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionHeader}>Description</Text>
-          <Text style={styles.descriptionContent}>
-            Available for free wifi,water supply available and nearby
-            hospital,school,park and Theater and there is in main city of this
-            area and blaw blaw blaw
-          </Text>
+          <Text style={styles.descriptionContent}>{data?.description}</Text>
         </View>
         <Text style={styles.galleryHeader}>Photo Gallery</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.imagesContainer}>
-            <Image source={images.home_row1} style={styles.slideshowImage} />
-            <Image source={images.home_row2} style={styles.slideshowImage} />
-            <Image source={images.home_row3} style={styles.slideshowImage} />
-            <Image source={images.home_row4} style={styles.slideshowImage} />
+            {data?.imageUploaded.map((imageUrl, index) => (
+              <Image
+                key={index}
+                source={{ uri: imageUrl }}
+                style={styles.slideshowImage}
+              />
+            ))}
           </View>
         </ScrollView>
       </View>

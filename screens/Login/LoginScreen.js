@@ -34,7 +34,7 @@ export default function LoginScreen({ navigation }) {
         Toast.show({
           type: "success",
           text1: "Welcome " + userEmail + "!",
-          position: "bottom",
+          position: "top",
           visibilityTime: 3000,
         });
         setIsLoading(false);

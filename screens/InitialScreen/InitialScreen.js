@@ -7,11 +7,24 @@ import {
   Image,
 } from "react-native";
 import styles from "./InitialScreenStyle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { icons, images } from "../../constants";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
 const InitialScreen = ({ navigation }) => {
   const Stack = createNativeStackNavigator();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.navigate("Home");
+      } else {
+        navigation.navigate("InitialScreen");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />

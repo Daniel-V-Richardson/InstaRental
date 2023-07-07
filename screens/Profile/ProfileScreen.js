@@ -5,12 +5,43 @@ import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import styles from "./ProfileScreenStyle";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-import { useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth, db } from "../../firebaseConfig";
+import { useEffect, useState } from "react";
 import AnimatedLoader from "react-native-animated-loader";
+import { collection, doc, getDoc } from "firebase/firestore";
 
 const ProfileScreen = ({ navigation }) => {
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  function getUserData() {
+    const user = auth.currentUser;
+    console.log(user.uid)
+    if (user) {
+      const uid = user.uid;
+      const usersCollection = collection(db, "Users");
+      const docRef = doc(usersCollection, uid);
+
+      getDoc(docRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            const userData = doc.data();
+            setUserData(userData);
+          } else {
+            console.log("User data not found in Firestore");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting user data from Firestore: ", error);
+        });
+    } else {
+      console.log("No user currently logged in");
+    }
+  }
+
   const [isLoading, setIsLoading] = useState(false);
   const Logout = () => {
     setIsLoading(true);
@@ -22,6 +53,13 @@ const ProfileScreen = ({ navigation }) => {
         console.log(error);
       });
   };
+  // if (!userData) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text>Loading...</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
@@ -31,15 +69,21 @@ const ProfileScreen = ({ navigation }) => {
         animationStyle={styles.lottie}
         speed={1}
       >
-        <Text>Signing In Please wait...</Text>
+        <Text>Signing out Please wait...</Text>
       </AnimatedLoader>
-      <Text style={styles.userHeader}>User Name</Text>
-
+      <Text style={styles.userHeader}>User</Text>
       <View style={styles.userInfoContainer}>
         <Image source={images.avatar} style={styles.userAvatar} />
-        <Text style={styles.userName}>User Name</Text>
-        <Text style={styles.userName}>exapmle@gmail.com</Text>
-        <Text style={styles.userName}>Thoothukudi</Text>
+        {userData ? (
+          <>
+            <Text style={styles.userName}>{userData.userName}</Text>
+            <Text style={styles.userName}>{userData.emailAddress}</Text>
+            <Text style={styles.userName}>{userData.location}</Text>
+            {/* Other user data fields */}
+          </>
+        ) : (
+          <Text style={styles.userName}>Loading user data...</Text>
+        )}
         <Text style={styles.userName}>Male</Text>
         <TouchableOpacity style={styles.editUserButton}>
           <Text style={styles.editUserText}>Edit User Information</Text>

@@ -11,7 +11,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { image } from "../../constants";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -19,6 +19,8 @@ import styles from "./HomeScreenStyle";
 import ChatHome from "./Chat/ChatHomeScreen";
 import Profile from "../Profile/ProfileScreen";
 import ProfileScreen from "../Profile/ProfileScreen";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 const Tab = createBottomTabNavigator();
 
@@ -99,6 +101,7 @@ const basedOnSearch = [
   },
 ];
 const HomePage = ({ navigation }) => {
+  const [data, setData] = useState([]);
   // const navigation = useNavigation();
   const backPressedRef = useRef(0);
 
@@ -143,6 +146,15 @@ const HomePage = ({ navigation }) => {
     return stars;
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collection(db, "Owners"));
+      const dataArray = querySnapshot.docs.map((doc) => doc.data());
+      setData(dataArray);
+    };
+    fetchData();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerComponent}> Home</Text>
@@ -168,14 +180,14 @@ const HomePage = ({ navigation }) => {
         <View style={styles.rowCard}>
           <Text style={styles.rowHeader}>Top Selling</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {topSelling.map((item) => (
+            {data.map((item) => (
               <View style={styles.card}>
                 <TouchableOpacity
                   key={item.id}
-                  onPress={() => navigation.navigate("Details")}
+                  onPress={() => navigation.navigate("Details",{uid: item.uid})}
                 >
                   <Image
-                    source={item.imageSource}
+                    source={{uri: item.imageUploaded[0]}}
                     style={styles.backgroundImage}
                   />
                 </TouchableOpacity>
@@ -205,17 +217,17 @@ const HomePage = ({ navigation }) => {
 
         <Text style={styles.columnHeader}>Based on your Location</Text>
         <View style={styles.searchRowContainer}>
-          {basedOnSearch.map((item) => (
-            <View key={item.id} style={styles.columnCard}>
-              <TouchableOpacity onPress={() => navigation.navigate("Details")}>
-                <Image source={item.imageSource} style={styles.searchImage} />
+          {data.map((item) => (
+            <View key={item.uid} style={styles.columnCard}>
+              <TouchableOpacity onPress={() => navigation.navigate("Details",{ uid: item.uid })}>
+                <Image source={{uri: item.imageUploaded[2]}} style={styles.searchImage} />
               </TouchableOpacity>
               <View style={styles.columnOverlay}>
                 <View style={styles.userContainer}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("AgentProfile")}
+                    onPress={() => navigation.navigate("AgentProfile",{ uid: item.uid })}
                   >
-                    <Image source={item.avatar} style={styles.avatar} />
+                    <Image source={{uri: item.imageUploaded[1]}} style={styles.avatar} />
                   </TouchableOpacity>
                   <View style={styles.userInfo}>
                     <Text style={styles.userName}>{item.userName}</Text>
