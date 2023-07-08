@@ -128,6 +128,7 @@ const PropertyRegisterScreen = ({ navigation }) => {
       description,
       imageUploaded,
       role: "owner",
+      ratings:'4'
     };
     const docRef = doc(collection(db, "Owners"), uid);
     await setDoc(docRef, newData);

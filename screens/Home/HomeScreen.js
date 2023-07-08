@@ -22,8 +22,6 @@ import ProfileScreen from "../Profile/ProfileScreen";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
-const Tab = createBottomTabNavigator();
-
 const topSelling = [
   {
     id: 1,
@@ -139,11 +137,11 @@ const HomePage = ({ navigation }) => {
   };
 
   const renderStars = (count) => {
-    const stars = [];
+    const ratings = [];
     for (let i = 0; i < count; i++) {
-      stars.push(<FontAwesome key={i} name="star" size={20} color="gold" />);
+      ratings.push(<FontAwesome key={i} name="star" size={20} color="gold" />);
     }
-    return stars;
+    return ratings;
   };
 
   useEffect(() => {
@@ -183,7 +181,7 @@ const HomePage = ({ navigation }) => {
             {data.map((item) => (
               <View style={styles.card}>
                 <TouchableOpacity
-                  key={item.id}
+                  key={item.uid}
                   onPress={() => navigation.navigate("Details",{uid: item.uid})}
                 >
                   <Image
@@ -198,7 +196,7 @@ const HomePage = ({ navigation }) => {
                   </View>
                   <View style={styles.detailsContainer}>
                     <View style={styles.starsContainer}>
-                      {renderStars(item.stars)}
+                      {renderStars(item.ratings)}
                       <Text style={styles.starsText}>{item.stars}</Text>
                     </View>
                     <Text style={styles.rentText}>
