@@ -1,22 +1,48 @@
 import { StyleSheet } from "react-native";
+import { FONT } from "../../../constants";
 
 const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor:'#000',
-        alignItems:'center',
+        // alignItems:'center',
     },
-    headerText:{
-        fontSize:20,
-        fontWeight:"bold",
-        color:"white",
-        marginTop:35,
-        marginBottom:20,
-    },
+    textHeader: {
+        backgroundColor:'black',
+        padding:20,
+        height:'12%',
+        flexDirection: "row",
+        alignItems: "center",
+        // justifyContent: "center",
+      },
+      text: {
+        fontSize: 25,
+        textAlign:'center',
+        justifyContent:'center',
+        marginTop:20,
+        fontFamily: FONT.black,
+        color: "#fff",
+      },
+      backContainer: {
+        marginTop:20,
+        marginRight:20,
+        width: 50,
+        zIndex: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 100,
+        backgroundColor: "#FAEBEB",
+        height: 50,
+      },
+      backBtn: {
+        height: "60%",
+        width: "60%",
+      },
     mainCardView:{
         backgroundColor:'#fff',
         width:'100%',
-        height:'100%',
+        height:'95%',
+        alignSelf:'center',
         borderTopLeftRadius:28,
         borderTopRightRadius:28,
         margin:10

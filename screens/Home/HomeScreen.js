@@ -19,87 +19,27 @@ import styles from "./HomeScreenStyle";
 import ChatHome from "./Chat/ChatHomeScreen";
 import Profile from "../Profile/ProfileScreen";
 import ProfileScreen from "../Profile/ProfileScreen";
+import { AntDesign } from "@expo/vector-icons";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
+import AnimatedLoader from "react-native-animated-loader";
+import { signOut } from "firebase/auth";
 
-const topSelling = [
-  {
-    id: 1,
-    imageSource: require("../../assets/images/home_row1.jpeg"),
-    location: "Thoothukudi",
-    stars: 4,
-    rent: 2500,
-  },
-  {
-    id: 2,
-    imageSource: require("../../assets/images/home_row2.jpeg"),
-    location: "Chennai",
-    stars: 5,
-    rent: 4000,
-  },
-  {
-    id: 3,
-    imageSource: require("../../assets/images/home_row3.jpeg"),
-    location: "Madurai",
-    stars: 3,
-    rent: 2000,
-  },
-  {
-    id: 4,
-    imageSource: require("../../assets/images/home_row4.jpeg"),
-    location: "Tirunelveli",
-    stars: 5,
-    rent: 3500,
-  },
-  {
-    id: 5,
-    imageSource: require("../../assets/images/home_row1.jpeg"),
-    location: "Thoothukudi",
-    stars: 5,
-    rent: 5000,
-  },
-];
-
-const basedOnSearch = [
-  {
-    id: 1,
-    imageSource: require("../../assets/images/home_row1.jpeg"),
-    title: "",
-    description: "",
-    avatar: require("../../assets/images/avatar.png"),
-    userName: "Arun",
-    location: "Thoothukudi",
-  },
-  {
-    id: 2,
-    imageSource: require("../../assets/images/home_row2.jpeg"),
-    title: "",
-    description: "",
-    avatar: require("../../assets/images/avatar.png"),
-    userName: "Richardson",
-    location: "Chennai",
-  },
-  {
-    id: 3,
-    imageSource: require("../../assets/images/home_row3.jpeg"),
-    title: "",
-    description: "",
-    avatar: require("../../assets/images/avatar.png"),
-    userName: "Daniel",
-    location: "Madurai",
-  },
-  {
-    id: 4,
-    imageSource: require("../../assets/images/home_row4.jpeg"),
-    title: "",
-    description: "",
-    avatar: require("../../assets/images/avatar.png"),
-    userName: "Ak",
-    location: "Coimbatore",
-  },
-];
 const HomePage = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [currentUser, setcurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const Logout = () => {
+    setIsLoading(true);
+    signOut(auth)
+      .then(() => {
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      setIsLoading(false);
+  };
   // const navigation = useNavigation();
   const backPressedRef = useRef(0);
 
@@ -145,25 +85,65 @@ const HomePage = ({ navigation }) => {
   };
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const user = auth.currentUser;
+      const uid = user.uid;
+      const userCollection = collection(db, "Users");
+      const docRef = doc(userCollection, uid);
+
+      getDoc(docRef).then((doc) => {
+        if (doc.exists()) {
+          const userData = doc.data();
+          setcurrentUser(userData);
+        } else {
+          console.log("User data not found in Firestore");
+        }
+      });
+    };
+
     const fetchData = async () => {
       const querySnapshot = await getDocs(collection(db, "Owners"));
       const dataArray = querySnapshot.docs.map((doc) => doc.data());
       setData(dataArray);
     };
     fetchData();
+    fetchCurrentUser();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerComponent}> Home</Text>
-      <ScrollView>
+      <AnimatedLoader
+        visible={isLoading}
+        overlayColor="rgba(255,255,255,0.75)"
+        animationStyle={styles.lottie}
+        speed={1}
+      >
+        <Text>Signing out Please wait...</Text>
+      </AnimatedLoader>
+      <View style={styles.headerContainer}>
+        {currentUser ? (
+          <Text style={styles.welcomeText}>
+            Welcome <Text style={styles.user}>{currentUser.userName}</Text>{" "}
+          </Text>
+        ) : (
+          <Text style={styles.welcomeText}>Welcome</Text>
+        )}
+        <AntDesign
+          onPress={Logout}
+          style={styles.logout}
+          name="logout"
+          size={30}
+          color="white"
+        />
+      </View>
+      <View style={styles.mainContainer}>
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.input}
             placeholder="Search the location "
             placeholderTextColor="#777"
           />
-          <TouchableOpacity key={topSelling.id} onPress={() => {}}>
+          <TouchableOpacity key={data.uid} onPress={() => {}}>
             <FontAwesome
               name="search"
               size={20}
@@ -172,74 +152,93 @@ const HomePage = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Harizantol scroll view in top selling houses*/}
 
-        {/* Harizantol scroll view in top selling houses*/}
+          <View style={styles.rowCard}>
+            <Text style={styles.rowHeader}>Top Selling</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {data.map((item) => (
+                <View style={styles.card}>
+                  <TouchableOpacity
+                    key={item.uid}
+                    onPress={() =>
+                      navigation.navigate("Details", { uid: item.uid })
+                    }
+                  >
+                    <Image
+                      source={{ uri: item.imageUploaded[0] }}
+                      style={styles.backgroundImage}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.overlay}>
+                    <View style={styles.detailsTopContainer}>
+                      <Text style={styles.locationText}>{item.location}</Text>
+                      <FontAwesome name="bookmark-o" size={20} color="white" />
+                    </View>
+                    <View style={styles.detailsContainer}>
+                      <View style={styles.starsContainer}>
+                        {renderStars(item.ratings)}
+                        <Text style={styles.starsText}>{item.stars}</Text>
+                      </View>
+                      <Text style={styles.rentText}>
+                        Rent:{" "}
+                        <FontAwesome5
+                          name="rupee-sign"
+                          size={14}
+                          color="white"
+                        />
+                        {item.rent}/month
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
 
-        <View style={styles.rowCard}>
-          <Text style={styles.rowHeader}>Top Selling</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {/* Based on your search vertical scroll view*/}
+
+          <Text style={styles.columnHeader}>Based on your Location</Text>
+          <View style={styles.searchRowContainer}>
             {data.map((item) => (
-              <View style={styles.card}>
+              <View key={item.uid} style={styles.columnCard}>
                 <TouchableOpacity
-                  key={item.uid}
-                  onPress={() => navigation.navigate("Details",{uid: item.uid})}
+                  onPress={() =>
+                    navigation.navigate("Details", { uid: item.uid })
+                  }
                 >
                   <Image
-                    source={{uri: item.imageUploaded[0]}}
-                    style={styles.backgroundImage}
+                    source={{ uri: item.imageUploaded[2] }}
+                    style={styles.searchImage}
                   />
                 </TouchableOpacity>
-                <View style={styles.overlay}>
-                  <View style={styles.detailsTopContainer}>
-                    <Text style={styles.locationText}>{item.location}</Text>
-                    <FontAwesome name="bookmark-o" size={20} color="white" />
-                  </View>
-                  <View style={styles.detailsContainer}>
-                    <View style={styles.starsContainer}>
-                      {renderStars(item.ratings)}
-                      <Text style={styles.starsText}>{item.stars}</Text>
+                <View style={styles.columnOverlay}>
+                  <View style={styles.userContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("AgentProfile", { uid: item.uid })
+                      }
+                    >
+                      <Image
+                        source={{ uri: item.imageUploaded[1] }}
+                        style={styles.avatar}
+                      />
+                    </TouchableOpacity>
+                    <View style={styles.userInfo}>
+                      <Text style={styles.userName}>{item.userName}</Text>
+                      <Text style={styles.location}>{item.location}</Text>
                     </View>
-                    <Text style={styles.rentText}>
-                      Rent:{" "}
-                      <FontAwesome5 name="rupee-sign" size={14} color="white" />
-                      {item.rent}/month
-                    </Text>
                   </View>
                 </View>
               </View>
             ))}
-          </ScrollView>
-        </View>
-
-        {/* Based on your search vertical scroll view*/}
-
-        <Text style={styles.columnHeader}>Based on your Location</Text>
-        <View style={styles.searchRowContainer}>
-          {data.map((item) => (
-            <View key={item.uid} style={styles.columnCard}>
-              <TouchableOpacity onPress={() => navigation.navigate("Details",{ uid: item.uid })}>
-                <Image source={{uri: item.imageUploaded[2]}} style={styles.searchImage} />
-              </TouchableOpacity>
-              <View style={styles.columnOverlay}>
-                <View style={styles.userContainer}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("AgentProfile",{ uid: item.uid })}
-                  >
-                    <Image source={{uri: item.imageUploaded[1]}} style={styles.avatar} />
-                  </TouchableOpacity>
-                  <View style={styles.userInfo}>
-                    <Text style={styles.userName}>{item.userName}</Text>
-                    <Text style={styles.location}>{item.location}</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
-        </View>
-        <View style={styles.bottom}>
-          <Text></Text>
-        </View>
-      </ScrollView>
+          </View>
+          <View style={styles.bottom}>
+            <Text></Text>
+          </View>
+        </ScrollView>
+      </View>
       <View style={styles.navbar}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <FontAwesome name="home" size={30} color={"#fff"} />

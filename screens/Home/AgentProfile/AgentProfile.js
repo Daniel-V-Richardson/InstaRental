@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import { images } from "../../../constants";
+import { icons, images } from "../../../constants";
 // import {Fontawesome} from '@expo/vector-icons'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -32,8 +32,19 @@ const AgentProfile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>AgentDetails Page</Text>
-
+      <View style={styles.textHeader}>
+        <TouchableOpacity
+          style={styles.backContainer}
+          onPress={() => navigation.goBack()}
+        >
+          <Image
+            style={styles.backBtn}
+            resizeMode="cover"
+            source={icons.back}
+          />
+        </TouchableOpacity>
+        <Text style={styles.text}>Agent Profile</Text>
+      </View>
       <View style={styles.mainCardView}>
         <View style={styles.userInfoContainer}>
           <Image source={images.avatar} style={styles.avatar} />
@@ -61,7 +72,7 @@ const AgentProfile = ({ navigation, route }) => {
             <View style={styles.houseRow}>
               <View style={styles.homeDetails}>
                 <Image
-                  source={{uri:data?.imageUploaded[0]}}
+                  source={{ uri: data?.imageUploaded[0] }}
                   style={styles.houseCardImage}
                 />
                 <Text style={styles.homeRent}>
