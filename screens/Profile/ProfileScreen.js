@@ -52,6 +52,7 @@ const ProfileScreen = ({ navigation }) => {
       .catch((error) => {
         console.log(error);
       });
+      setIsLoading(false);
   };
   // if (!userData) {
   //   return (

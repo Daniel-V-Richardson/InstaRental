@@ -10,7 +10,7 @@ import { FONT, icons, images } from "../../../constants";
 import { FontAwesome } from "@expo/vector-icons";
 import styles from "./DetailsScreenStyle";
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocFromCache, getDocs } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import AnimatedLoader from "react-native-animated-loader";
 import { Ionicons } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ export default function DetailsScreen({ navigation, route }) {
 
     const fetchData = async () => {
       const docRef = doc(collection(db, "Owners"), uid);
+
       const docSnapshot = await getDoc(docRef);
       if (docSnapshot.exists()) {
         setData(docSnapshot.data());

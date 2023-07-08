@@ -4,13 +4,37 @@ import { FONT } from "../../constants/theme";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    marginTop: 40,
+    backgroundColor:'black'
   },
-  headerComponent: {
-    fontFamily: FONT.bold,
-    alignItems: "center",
+  headerContainer: {
+    backgroundColor:'black',
+    padding:20,
+    height:'12%',
+    flexDirection: "row",
+    justifyContent:'space-around'
+  },
+  mainContainer:{
+    backgroundColor:'#fff',
+        width:'100%',
+        height:'90%',
+        alignSelf:'center',
+        
+        borderTopLeftRadius:28,
+        borderTopRightRadius:28,
+        margin:10
+  },
+  welcomeText: {
+    fontFamily: FONT.black,
+    marginTop: 20,
     fontSize: 24,
+    color: "white",
+  },
+  user: {
+    color: "skyblue",
+  },
+  logout:{    
+    alignSelf:'center',
+    marginTop:20,
   },
   searchContainer: {
     flexDirection: "row",
@@ -168,6 +192,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "#000",
     bottom: 10,
+    alignSelf: "center",
     paddingLeft: 45,
     paddingRight: 45,
     paddingTop: 20,
