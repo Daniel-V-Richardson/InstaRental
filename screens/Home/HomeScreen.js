@@ -10,15 +10,10 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { image } from "../../constants";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Toast from "react-native-toast-message";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import styles from "./HomeScreenStyle";
-import ChatHome from "./Chat/ChatHomeScreen";
-import Profile from "../Profile/ProfileScreen";
-import ProfileScreen from "../Profile/ProfileScreen";
 import { AntDesign } from "@expo/vector-icons";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
@@ -40,7 +35,6 @@ const HomePage = ({ navigation }) => {
       });
       setIsLoading(false);
   };
-  // const navigation = useNavigation();
   const backPressedRef = useRef(0);
 
   useFocusEffect(

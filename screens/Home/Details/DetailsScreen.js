@@ -10,16 +10,21 @@ import { FONT, icons, images } from "../../../constants";
 import { FontAwesome } from "@expo/vector-icons";
 import styles from "./DetailsScreenStyle";
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocFromCache, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocFromCache,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import AnimatedLoader from "react-native-animated-loader";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 export default function DetailsScreen({ navigation, route }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    
     const { uid } = route.params;
 
     const fetchData = async () => {
@@ -61,7 +66,12 @@ export default function DetailsScreen({ navigation, route }) {
             style={styles.backContainer}
             onPress={() => navigation.navigate("Home")}
           >
-            <Ionicons style={styles.backBtn} name="arrow-back" size={30} color="white" />
+            <Ionicons
+              style={styles.backBtn}
+              name="arrow-back"
+              size={30}
+              color="white"
+            />
           </TouchableOpacity>
         </View>
         <Image
@@ -69,7 +79,11 @@ export default function DetailsScreen({ navigation, route }) {
           style={styles.backgroundImage}
         ></Image>
         <View style={styles.userContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("AgentProfile")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("AgentProfile", { uid: data.uid })
+            }
+          >
             <Image source={images.avatar} style={styles.avatar} />
           </TouchableOpacity>
           <View style={styles.userInfo}>
